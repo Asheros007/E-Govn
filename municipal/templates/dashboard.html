@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Nagarpalika Sewa</title>
+    <link rel="stylesheet" href="{% static '../static/dashboard.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">Nagarpalika<span>Sewa</span></div>
+            <div class="user-info">
+                Welcome, {{ request.user.username }} | Citizen Dashboard
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome to Your Dashboard</h1>
+            <p>Report municipal issues, track your complaints, and contribute to your community development.</p>
+        </div>
+        
+        <div class="stats-cards">
+            <div class="stat-card">
+                <h3>Total Complaints</h3>
+                <div class="number">5</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <div class="number">2</div>
+            </div>
+            <div class="stat-card">
+                <h3>In Progress</h3>
+                <div class="number">2</div>
+            </div>
+            <div class="stat-card">
+                <h3>Resolved</h3>
+                <div class="number">1</div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <div class="action-card">
+                <h2>Submit New Complaint</h2>
+                <p>Report a municipal issue or problem in your area</p>
+                <a href="{% url 'submit_complaint' %}" class="action-btn">File Complaint</a>
+            </div>
+            
+            <div class="action-card">
+                <h2>My Complaints</h2>
+                <p>View and track all your submitted complaints</p>
+                <a href="{% url 'my_complaint' %}" class="action-btn">View All</a>
+            </div>
+            
+            <div class="action-card">
+                <h2>Profile Settings</h2>
+                <p>Update your personal information and preferences</p>
+                <a href="{% url 'profile' %}" class="action-btn">Edit Profile</a>
+            </div>
+        </div>
+        
+        <div class="recent-complaints">
+            <h2>Recent Complaints</h2>
+            <div class="complaints-list">
+                <div class="complaint-item">
+                    <div>
+                        <strong>Garbage not collected for 3 days</strong><br>
+                        <small>Submitted: 2024-01-10</small>
+                    </div>
+                    <span class="status in-progress">In Progress</span>
+                </div>
+                <div class="complaint-item">
+                    <div>
+                        <strong>Street light not working</strong><br>
+                        <small>Submitted: 2024-01-08</small>
+                    </div>
+                    <span class="status pending">Pending</span>
+                </div>
+                <div class="complaint-item">
+                    <div>
+                        <strong>Pothole on main road</strong><br>
+                        <small>Submitted: 2024-01-05</small>
+                    </div>
+                    <span class="status resolved">Resolved</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

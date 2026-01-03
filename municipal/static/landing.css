@@ -1,0 +1,232 @@
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 700px;
+        }
+        
+        .left-section {
+            flex: 1;
+            background: linear-gradient(135deg, #1e5799 0%, #207cca 100%);
+            color: white;
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .left-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('{% static "images/municipal-pattern.png" %}') center/cover;
+            opacity: 0.1;
+        }
+        
+        .logo {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: white;
+            letter-spacing: 1px;
+        }
+        
+        .logo span {
+            color: #ffd700;
+        }
+        
+        .left-section h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+        
+        .left-section p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .features {
+            margin-top: 40px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        
+        .feature-text {
+            flex: 1;
+            font-size: 16px;
+        }
+        
+        .right-section {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: #f8fafc;
+        }
+        
+        .welcome-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border-top: 5px solid #1e5799;
+        }
+        
+        .welcome-card h2 {
+            color: #1e5799;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-card p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #1e5799;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            background: #16437e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 87, 153, 0.2);
+        }
+        
+        .btn.secondary {
+            background: transparent;
+            color: #1e5799;
+            border: 2px solid #1e5799;
+        }
+        
+        .btn.secondary:hover {
+            background: #1e5799;
+            color: white;
+        }
+        
+        .btn.guest {
+            background: #ffd700;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .btn.guest:hover {
+            background: #e6c200;
+        }
+        
+        .separator {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .separator::before, .separator::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+            margin: 0 10px;
+        }
+        
+        .municipal-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #1e5799, #207cca);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .left-section, .right-section {
+                padding: 30px 25px;
+            }
+            
+            .left-section h2 {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .left-section h2 {
+                font-size: 24px;
+            }
+            
+            .welcome-card {
+                padding: 30px 20px;
+            }
+            
+            .welcome-card h2 {
+                font-size: 26px;
+            }
+        }

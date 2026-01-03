@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nagarpalika Sewa | Municipal Complaint System</title>
+    <link rel="stylesheet" href="{% static '../static/landing.css' %}">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <h1 class="logo">Nagarpalika<span>Sewa</span></h1>
+            <h2>Your Voice Matters in Municipal Governance</h2>
+            <p>
+                Nagarpalika Sewa is the official digital platform for citizens to report 
+                municipal issues and complaints directly to local government authorities. 
+                Our system ensures timely resolution and transparent tracking of community concerns.
+            </p>
+            <p>
+                From waste management and road repairs to water supply and public safety, 
+                every complaint is documented, assigned, and monitored until resolution. 
+                Join thousands of citizens actively participating in municipal development.
+            </p>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-text">Real-time complaint tracking and status updates</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-text">Direct communication with municipal officials</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-text">Transparent resolution process with timelines</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <div class="feature-text">Priority-based complaint categorization</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="municipal-logo">
+                <img src="../static/logo.png" alt="" height="125">
+            </div>
+            <div class="welcome-card">
+                <h2>Citizen Portal</h2>
+                <p>Report municipal issues, track resolution progress, and contribute to community development. Your complaint makes a difference.</p>
+                
+                <a href="{% url 'signup' %}" class="btn">Register as Citizen</a>
+                <a href="{% url 'login' %}" class="btn secondary">Citizen Login</a>    
+            </div>
+            
+            <div style="margin-top: 30px; text-align: center; font-size: 14px; color: #666;">
+                <p>Supported by Nepal Government Municipal Services</p>
+                <p style="margin-top: 5px;">📞 Complaint Helpline: 078-1231241</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
