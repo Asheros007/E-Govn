@@ -57,7 +57,27 @@ def login(request):
     
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+
+    user_complaints = Complaint.objects.filter(user=request.user)
+    
+    total_complaints = user_complaints.count()
+    pending_count = user_complaints.filter(status='PENDING').count()
+    in_progress_count = user_complaints.filter(status='IN_PROGRESS').count()
+    resolved_count = user_complaints.filter(status='RESOLVED').count()
+    rejected_count = user_complaints.filter(status='REJECTED').count()
+    
+    recent_complaints = user_complaints.order_by('-created_at')[:5]
+    
+    context = {
+        'total_complaints': total_complaints,
+        'pending_count': pending_count,
+        'in_progress_count': in_progress_count,
+        'resolved_count': resolved_count,
+        'rejected_count': rejected_count,
+        'recent_complaints': recent_complaints,
+    }
+    
+    return render(request, 'dashboard.html', context)
 
 @login_required
 def submit_complaint(request):
@@ -120,9 +140,6 @@ def complaint_detail(request, complaint_id):
     }
     
     return render(request, 'complaint_detail.html', context)
-
-def profile(request):
-    return render(request, 'profile.html')
 
 def user_logout(request):
     logout(request)

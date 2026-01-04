@@ -6,7 +6,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Nagarpalika Sewa</title>
     <link rel="stylesheet" href="{% static '../static/dashboard.css' %}">
-
+    <style>
+        /* Additional styles for dynamic content */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+            margin-top: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #1e5799;
+            margin-bottom: 10px;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-total { color: #1e5799; }
+        .stat-pending { color: #ffc107; }
+        .stat-progress { color: #17a2b8; }
+        .stat-resolved { color: #28a745; }
+        .stat-rejected { color: #dc3545; }
+        
+        .complaint-category {
+            font-weight: bold;
+            color: #1e5799;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .complaint-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .complaint-date {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .quick-stats {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-stat {
+            padding: 5px 15px;
+            background: #f0f7ff;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -22,75 +94,142 @@
     
     <div class="container">
         <div class="welcome-section">
-            <h1>Welcome to Your Dashboard</h1>
+            <h1>Welcome to Your Dashboard, {{ request.user.username }}</h1>
             <p>Report municipal issues, track your complaints, and contribute to your community development.</p>
+            <p><small>Member since: {{ request.user.date_joined|date:"F d, Y" }}</small></p>
         </div>
         
+        <!-- Stats Cards with Dynamic Data -->
         <div class="stats-cards">
             <div class="stat-card">
                 <h3>Total Complaints</h3>
-                <div class="number">5</div>
+                <div class="number stat-total">{{ total_complaints|default:"0" }}</div>
+                <small>All submitted complaints</small>
             </div>
             <div class="stat-card">
                 <h3>Pending</h3>
-                <div class="number">2</div>
+                <div class="number stat-pending">{{ pending_count|default:"0" }}</div>
+                <small>Awaiting review</small>
             </div>
             <div class="stat-card">
                 <h3>In Progress</h3>
-                <div class="number">2</div>
+                <div class="number stat-progress">{{ in_progress_count|default:"0" }}</div>
+                <small>Being addressed</small>
             </div>
             <div class="stat-card">
                 <h3>Resolved</h3>
-                <div class="number">1</div>
+                <div class="number stat-resolved">{{ resolved_count|default:"0" }}</div>
+                <small>Successfully closed</small>
             </div>
+            {% if rejected_count > 0 %}
+            <div class="stat-card">
+                <h3>Rejected</h3>
+                <div class="number stat-rejected">{{ rejected_count|default:"0" }}</div>
+                <small>Not approved</small>
+            </div>
+            {% endif %}
         </div>
+    
         
         <div class="actions">
             <div class="action-card">
                 <h2>Submit New Complaint</h2>
                 <p>Report a municipal issue or problem in your area</p>
-                <a href="{% url 'submit_complaint' %}" class="action-btn">File Complaint</a>
+                <a href="{% url 'submit_complaint' %}" class="action-btn">➕ File Complaint</a>
             </div>
             
             <div class="action-card">
                 <h2>My Complaints</h2>
                 <p>View and track all your submitted complaints</p>
-                <a href="{% url 'my_complaint' %}" class="action-btn">View All</a>
-            </div>
-            
-            <div class="action-card">
-                <h2>Profile Settings</h2>
-                <p>Update your personal information and preferences</p>
-                <a href="{% url 'profile' %}" class="action-btn">Edit Profile</a>
+                <a href="{% url 'my_complaint' %}" class="action-btn">
+                    📋 View All ({{ total_complaints|default:"0" }})
+                </a>
+                {% if total_complaints > 0 %}
+                <div class="quick-stats" style="margin-top: 15px;">
+                    <a href="{% url 'my_complaint' %}?status=PENDING" style="font-size: 12px; padding: 3px 10px; background: #fff3cd; color: #856404; border-radius: 15px; text-decoration: none;">
+                        Pending: {{ pending_count|default:"0" }}
+                    </a>
+                    <a href="{% url 'my_complaint' %}?status=IN_PROGRESS" style="font-size: 12px; padding: 3px 10px; background: #d1ecf1; color: #0c5460; border-radius: 15px; text-decoration: none;">
+                        In Progress: {{ in_progress_count|default:"0" }}
+                    </a>
+                    <a href="{% url 'my_complaint' %}?status=RESOLVED" style="font-size: 12px; padding: 3px 10px; background: #d4edda; color: #155724; border-radius: 15px; text-decoration: none;">
+                        Resolved: {{ resolved_count|default:"0" }}
+                    </a>
+                </div>
+                {% endif %}
             </div>
         </div>
         
+        <!-- Recent Complaints Section -->
         <div class="recent-complaints">
-            <h2>Recent Complaints</h2>
-            <div class="complaints-list">
-                <div class="complaint-item">
-                    <div>
-                        <strong>Garbage not collected for 3 days</strong><br>
-                        <small>Submitted: 2024-01-10</small>
-                    </div>
-                    <span class="status in-progress">In Progress</span>
-                </div>
-                <div class="complaint-item">
-                    <div>
-                        <strong>Street light not working</strong><br>
-                        <small>Submitted: 2024-01-08</small>
-                    </div>
-                    <span class="status pending">Pending</span>
-                </div>
-                <div class="complaint-item">
-                    <div>
-                        <strong>Pothole on main road</strong><br>
-                        <small>Submitted: 2024-01-05</small>
-                    </div>
-                    <span class="status resolved">Resolved</span>
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Recent Complaints</h2>
+                {% if recent_complaints %}
+                <a href="{% url 'my_complaint' %}" style="color: #1e5799; text-decoration: none; font-size: 14px;">
+                    View All →
+                </a>
+                {% endif %}
             </div>
+            
+            {% if recent_complaints %}
+                <div class="complaints-list">
+                    {% for complaint in recent_complaints %}
+                    <div class="complaint-item">
+                        <div>
+                            <span class="complaint-category">{{ complaint.category }}</span>
+                            <p class="complaint-description">{{ complaint.description|truncatechars:100 }}</p>
+                            <small class="complaint-date">
+                                Submitted: {{ complaint.created_at|date:"M d, Y" }} • 
+                                ID: #{{ complaint.id }}
+                            </small>
+                        </div>
+                        <span class="status {{ complaint.status|lower|slugify }}">
+                            {{ complaint.get_status_display }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if total_complaints > 5 %}
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="{% url 'my_complaints' %}" class="action-btn" style="display: inline-block; width: auto; padding: 10px 30px;">
+                        View All {{ total_complaints }} Complaints
+                    </a>
+                </div>
+                {% endif %}
+                
+            {% else %}
+                <div class="empty-state">
+                    <h3>No Complaints Yet</h3>
+                    <p>You haven't submitted any complaints yet. Start by reporting an issue in your area.</p>
+                    <a href="{% url 'submit_complaint' %}" class="action-btn" style="display: inline-block; width: auto; margin-top: 15px;">
+                        Submit Your First Complaint
+                    </a>
+                </div>
+            {% endif %}
         </div>
+        
     </div>
+
+    <script>
+        // Add animation to stat cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Add click animation
+            const actionBtns = document.querySelectorAll('.action-btn');
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
