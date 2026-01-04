@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Nagarpalika Sewa</title>
     <link rel="stylesheet" href="{% static '../static/dashboard.css' %}">
+
 </head>
 <body>
     <nav class="navbar">
@@ -15,6 +16,8 @@
                 Welcome, {{ request.user.username }} | Citizen Dashboard
             </div>
         </div>
+        {% url 'logout' as logout_url %}
+        <button class="logout-btn" onclick="window.location.href='{{ logout_url }}'">Logout</button>
     </nav>
     
     <div class="container">

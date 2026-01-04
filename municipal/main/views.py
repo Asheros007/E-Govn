@@ -1,6 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+from .models import Complaint
 
 def landing(request):
     return render(request, 'landing.html')
@@ -51,14 +55,75 @@ def login(request):
     else:
         return render(request, 'login.html')
     
+@login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
 
+@login_required
 def submit_complaint(request):
+    if request.method == 'POST':
+
+        category = request.POST.get('category')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        
+        if not category or not description:
+            messages.error(request, 'Please fill in all required fields')
+            return render(request, 'submit_complaint.html')
+        
+        complaint = Complaint.objects.create(
+            user=request.user,
+            category=category,
+            description=description,
+            image=image,
+            status='PENDING'
+        )
+        
+        messages.success(request, 'Complaint submitted successfully!')
+        return redirect('my_complaint')
+    
     return render(request, 'submit_complaint.html')
 
+@login_required
 def my_complaint(request):
-    return render(request, 'my_complaint.html')
+
+    complaints = Complaint.objects.filter(user=request.user).order_by('-created_at')
+    status_filter = request.GET.get('status', None)
+    
+    if status_filter:
+        complaints = complaints.filter(status=status_filter)
+    
+    total_count = Complaint.objects.filter(user=request.user).count()
+    pending_count = Complaint.objects.filter(user=request.user, status='PENDING').count()
+    in_progress_count = Complaint.objects.filter(user=request.user, status='IN_PROGRESS').count()
+    resolved_count = Complaint.objects.filter(user=request.user, status='RESOLVED').count()
+    rejected_count = Complaint.objects.filter(user=request.user, status='REJECTED').count()
+    
+    context = {
+        'complaints': complaints,
+        'status_filter': status_filter,
+        'total_count': total_count,
+        'pending_count': pending_count,
+        'in_progress_count': in_progress_count,
+        'resolved_count': resolved_count,
+        'rejected_count': rejected_count,
+    }
+    
+    return render(request, 'my_complaint.html', context)
+
+@login_required
+def complaint_detail(request, complaint_id):
+    complaint = get_object_or_404(Complaint, id=complaint_id, user=request.user)
+    
+    context = {
+        'complaint': complaint,
+    }
+    
+    return render(request, 'complaint_detail.html', context)
 
 def profile(request):
     return render(request, 'profile.html')
+
+def user_logout(request):
+    logout(request)
+    return redirect('landing')

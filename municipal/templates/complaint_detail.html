@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details | Nagarpalika Sewa</title>
+    <link rel="stylesheet" href="{% static '../static/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static '../static/complaint_detail.css' %}">
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">Nagarpalika<span>Sewa</span></div>
+            <div class="user-info">
+                Complaint Details
+            </div>
+        </div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <a href="{% url 'dashboard' %}" style="color: white; text-decoration: none;">Dashboard</a>
+            <a href="{% url 'my_complaint' %}" style="color: white; text-decoration: none;">My Complaints</a>
+            {% url 'logout' as logout_url %}
+            <button class="logout-btn" onclick="window.location.href='{{ logout_url }}'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="container detail-container">
+        <div class="detail-card">
+            <div class="detail-header">
+                <div>
+                    <h1 class="complaint-title">{{ complaint.category }}</h1>
+                    <p>Complaint ID: #{{ complaint.id }}</p>
+                </div>
+                <span class="status-badge status-{{ complaint.status|lower }}">
+                    {{ complaint.get_status_display }}
+                </span>
+            </div>
+            
+            <div class="detail-section">
+                <span class="detail-label">Description</span>
+                <div class="detail-value">{{ complaint.description }}</div>
+            </div>
+            
+            {% if complaint.image %}
+            <div class="detail-section">
+                <span class="detail-label">Uploaded Image</span>
+                <div>
+                    <img src="{{ complaint.image.url }}" alt="Complaint Image" class="complaint-image">
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="meta-info">
+                <p><strong>Submitted By:</strong> {{ complaint.user.username }}</p>
+                <p><strong>Date Submitted:</strong> {{ complaint.created_at|date:"F d, Y, h:i A" }}</p>
+                <p><strong>Last Updated:</strong> {{ complaint.created_at|date:"F d, Y, h:i A" }}</p>
+                {% if complaint.status == 'RESOLVED' %}
+                <p><strong>Resolution Time:</strong></p>
+                {% endif %}
+            </div>
+            
+            <div class="action-buttons">
+                <a href="{% url 'my_complaint' %}" class="btn btn-back">← Back to Complaints</a>
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">Dashboard</a>
+                {% if complaint.status != 'RESOLVED' %}
+                <a href="#" class="btn btn-primary" onclick="alert('Update feature coming soon!')">Update Complaint</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

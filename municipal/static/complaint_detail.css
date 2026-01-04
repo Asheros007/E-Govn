@@ -1,0 +1,124 @@
+.detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.detail-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f0f7ff;
+  padding-bottom: 20px;
+}
+
+.complaint-title {
+  color: #1e5799;
+  margin-bottom: 10px;
+}
+
+.status-badge {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-in-progress {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.detail-section {
+  margin-bottom: 25px;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.detail-value {
+  color: #555;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  min-height: 40px;
+}
+
+.complaint-image {
+  max-width: 100%;
+  max-height: 400px;
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.btn {
+  padding: 10px 25px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: #1e5799;
+  color: white;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-back {
+  background: transparent;
+  color: #1e5799;
+  border: 2px solid #1e5799;
+}
+
+.meta-info {
+  background: #f0f7ff;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.meta-info p {
+  margin: 5px 0;
+  color: #555;
+}

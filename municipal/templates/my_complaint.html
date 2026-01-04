@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Complaints | Nagarpalika Sewa</title>
+    <link rel="stylesheet" href="{% static '../static/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static '../static/my_complaint.css' %}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">Nagarpalika<span>Sewa</span></div>
+            <div class="user-info">
+                Welcome, {{ request.user.username }}
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+            <a href="{% url 'submit_complaint' %}" class="nav-link">Submit Complaint</a>
+            {% url 'logout' as logout_url %}
+            <button class="logout-btn" onclick="window.location.href='{{ logout_url }}'">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <div>
+                <h1>My Complaints</h1>
+                <p>Total: {{ complaints|length }} complaint{{ complaints|length|pluralize }}</p>
+            </div>
+            <a href="{% url 'submit_complaint' %}" class="action-btn">
+                + Submit New Complaint
+            </a>
+        </div>
+        
+        <!-- Filter Options -->
+        <div class="filter-options">
+            <button class="filter-btn {% if not status_filter %}active{% endif %}" onclick="window.location.href='{% url 'my_complaint' %}'">
+                All ({{ total_count }})
+            </button>
+            <button class="filter-btn {% if status_filter == 'PENDING' %}active{% endif %}" onclick="window.location.href='{% url 'my_complaint' %}?status=PENDING'">
+                Pending ({{ pending_count }})
+            </button>
+            <button class="filter-btn {% if status_filter == 'IN_PROGRESS' %}active{% endif %}" onclick="window.location.href='{% url 'my_complaint' %}?status=IN_PROGRESS'">
+                In Progress ({{ in_progress_count }})
+            </button>
+            <button class="filter-btn {% if status_filter == 'RESOLVED' %}active{% endif %}" onclick="window.location.href='{% url 'my_complaint' %}?status=RESOLVED'">
+                Resolved ({{ resolved_count }})
+            </button>
+            <button class="filter-btn {% if status_filter == 'REJECTED' %}active{% endif %}" onclick="window.location.href='{% url 'my_complaint' %}?status=REJECTED'">
+                Rejected ({{ rejected_count }})
+            </button>
+        </div>
+        
+        {% if complaints %}
+            <div class="complaints-table">
+                <div class="table-header">
+                    <div>Category & Description</div>
+                    <div>Image</div>
+                    <div>Date Submitted</div>
+                    <div>Status</div>
+                    <div>Actions</div>
+                </div>
+                
+                {% for complaint in complaints %}
+                <div class="table-row">
+                    <div class="table-cell" data-label="Complaint">
+                        <strong>{{ complaint.category }}</strong>
+                        <p>{{ complaint.description|truncatechars:100 }}</p>
+                    </div>
+                    
+                    <div class="table-cell" data-label="Image">
+                        {% if complaint.image %}
+                            <img src="{{ complaint.image.url }}" alt="Complaint Image" class="complaint-image-thumb">
+                        {% else %}
+                            <span class="no-image-text">No image</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="table-cell" data-label="Date">
+                        <div class="date-main">{{ complaint.created_at|date:"M d, Y" }}</div>
+                        <small class="date-time">{{ complaint.created_at|time }}</small>
+                    </div>
+                    
+                    <div class="table-cell" data-label="Status">
+                        <span class="status-badge status-{{ complaint.status|lower }}">
+                            {{ complaint.get_status_display }}
+                        </span>
+                    </div>
+                    
+                    <div class="table-cell" data-label="Actions">
+                        <a href="{% url 'complaint_detail' complaint.id %}" class="action-btn">View Details</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Summary Stats -->
+            <div class="summary-section">
+                <h3>Complaint Summary</h3>
+                <div class="stats-grid">
+                    <div class="stat-box stat-total">
+                        <div class="stat-number">{{ total_count }}</div>
+                        <div class="stat-label">Total Complaints</div>
+                    </div>
+                    <div class="stat-box stat-pending">
+                        <div class="stat-number">{{ pending_count }}</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                    <div class="stat-box stat-progress">
+                        <div class="stat-number">{{ in_progress_count }}</div>
+                        <div class="stat-label">In Progress</div>
+                    </div>
+                    <div class="stat-box stat-resolved">
+                        <div class="stat-number">{{ resolved_count }}</div>
+                        <div class="stat-label">Resolved</div>
+                    </div>
+                </div>
+            </div>
+            
+        {% else %}
+            <div class="empty-state">
+                <h3>No Complaints Found</h3>
+                <p>
+                    {% if status_filter %}
+                        You don't have any {{ status_filter|lower }} complaints.
+                    {% else %}
+                        You haven't submitted any complaints yet.
+                    {% endif %}
+                </p>
+                <a href="{% url 'submit_complaint' %}" class="action-btn">
+                    Submit Your First Complaint
+                </a>
+            </div>
+        {% endif %}
+        
+        <!-- Back to Dashboard -->
+        <div class="back-link">
+            <a href="{% url 'dashboard' %}">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Add hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('.table-row');
+            rows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+            
+            // Filter button click effects
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
